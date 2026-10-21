@@ -1,0 +1,129 @@
+ROLE: You are a senior creative front-end engineer. The wedding invitation in this project is already built. Implement its motion and visual polish so it matches the original production site EXACTLY. Every value below comes from the original stylesheet; do not invent extra effects (no blur reveals, no idle cover zoom, no heartbeat, no framer-motion, no GSAP). Use plain CSS keyframes/transitions plus small React state/IntersectionObserver logic. Do not change any text or images. If a previous motion implementation exists, replace it with this spec.
+
+══════ 0. EXACT DESIGN TOKENS (put on :root in globals.css) ══════
+--ink: oklch(13% .006 70);            /* page black */
+--ink-soft: oklch(17% .008 70);
+--ivory: oklch(96% .015 85);
+--gold: oklch(70% .085 78);
+--champagne-gold: oklch(82% .06 82);  /* names, big italic headings */
+--champagne: oklch(78% .07 80);
+--champagne-deep: oklch(56% .07 70);
+--walima-bg: oklch(94% .025 80);
+--primary: oklch(80% .065 82);
+--muted-foreground: oklch(82% .02 82);
+--border: oklch(70% .085 78 / .4);
+--scratch-rose: #a8875a;
+Walima chapter pages (class chapter--c) override locally:
+--primary: oklch(42% .06 60); --gold: oklch(60% .08 75); --muted-foreground: oklch(50% .04 60); --scratch-rose: #6f7040; background: var(--walima-bg).
+Fonts: --font-display "Cormorant Garamond", --font-body "Manrope", --font-arabic "Noto Naskh Arabic".
+Easing used everywhere: cubic-bezier(.2,.7,.2,1). Page arrival easing: cubic-bezier(.2,.75,.2,1).
+
+══════ 1. PAGE BASICS ══════
+- html { scroll-behavior: smooth } ; buttons and links: -webkit-tap-highlight-color: transparent.
+- .invitation-page { background: var(--ink); color: var(--ivory); width: 100%; min-height: 100svh; overflow: hidden }
+- .invitation-page--closed and .invitation-page--opening { height: 100svh } (locks scrolling until opened).
+- body: overflow-x hidden, font-family var(--font-body).
+
+══════ 2. COVER → OPENING (state machine closed → opening → open) ══════
+- .cover-stage: display grid, place-items center, min-height 100svh, position relative, overflow hidden, background var(--ink), perspective 1400px.
+- Cover <img>: absolute inset 0, 100% × 100%, object-fit cover, transition: transform 1.6s cubic-bezier(.2,.8,.2,1). No idle animation.
+- The full-screen transparent button has padding 0.
+- On tap (only when "closed"): set "opening"; audio.volume = 0.6; audio.play(); after 900 ms set "open", then on the next requestAnimationFrame window.scrollTo({ top: 0, behavior: "instant" }).
+- While "opening":
+  .cover-stage--opening { animation: cover-glow-out .9s forwards }
+  .cover-stage--opening > img { transform: scale(1.04) }   (transitions over 1.6s, so it is still zooming as it fades)
+  @keyframes cover-glow-out {
+    0%   { opacity: 1; filter: brightness(1) }
+    45%  { opacity: 1; filter: brightness(1.6) drop-shadow(0 0 60px oklch(75% .12 85 / .8)) }
+    100% { opacity: 0; filter: brightness(2) }
+  }
+  The button also runs: @keyframes seal-lift { to { opacity: 0; transform: translateY(-35px) scale(.92) } } .9s forwards.
+
+══════ 3. ARRIVAL OF THE INVITATION ══════
+- .invitation-journey { position: relative; animation: invitation-arrive 1s cubic-bezier(.2,.75,.2,1) both }
+  @keyframes invitation-arrive { 0% { opacity: 0; transform: scale(1.015) } 100% { opacity: 1; transform: scale(1) } }
+- .invitation-page--open .hero-section { animation: hero-glow-in 1.4s ease-out both }
+  @keyframes hero-glow-in {
+    0%   { filter: brightness(2.2) drop-shadow(0 0 80px oklch(78% .12 85 / .9)) }
+    100% { filter: brightness(1) drop-shadow(0 0 0 transparent) }
+  }
+  Together with section 2 this creates one continuous "golden light" transition: the cover flares bright and fades, the hero emerges from that brightness.
+
+══════ 4. HERO TEXT CASCADE ══════
+.hero-reveal { opacity: 0; transform: translateY(22px); animation: hero-reveal 1s cubic-bezier(.2,.7,.2,1) forwards }
+@keyframes hero-reveal { to { opacity: 1; transform: translateY(0) } }
+Delays (exact): --1 .15s · --2 .40s · --3 .65s · --4 .85s · --5 1.05s · --6 1.35s · --7 1.65s
+Mapping: 1 Bismillah · 2 blessing + host + invite line block · 3 groom name · 4 "with" · 5 bride name · 6 "Daughter of…" · 7 ✦ + closing line. No blur.
+
+══════ 5. SCROLL REVEAL ══════
+After the state becomes "open", inside requestAnimationFrame, select:
+".ayat-copy > p, .ayat-copy > span, .chapter-number, .chapter-title, .chapter-frame > .eyebrow, .chapter-detail-body > *, .chapter-frame [data-slot='button'], .section-heading > *, .countdown > div, .rsvp-copy > .eyebrow, .rsvp-copy > h2, .rsvp-copy > p, .rsvp-actions > *, .wishes-copy > *"
+Add class scroll-text-reveal and observe with IntersectionObserver({ threshold: .16, rootMargin: "0px 0px -8%" }); on intersect add is-text-visible and unobserve; disconnect on cleanup.
+.scroll-text-reveal { opacity: 0; transform: translateY(22px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1) }
+.scroll-text-reveal.is-text-visible { opacity: 1; transform: translateY(0) }
+Exact stagger delays (pure CSS, no JS):
+- .12s → .ayat-copy > :nth-child(3), .chapter-detail-body > :nth-child(2), .section-heading > :nth-child(2), .rsvp-copy > :nth-child(2)
+- .20s → .chapter-detail-body > :nth-child(3), .rsvp-copy > :nth-child(3)
+- .28s → .chapter-detail-body > :nth-child(n+4)
+- .10s → .countdown > div:nth-child(2) ; .20s → nth-child(3) ; .30s → nth-child(4)
+
+══════ 6. SECTION OVERLAPS & COLOUR BLENDS ══════
+- .invitation-journey > section + section { margin-top: -2.5rem } (sections overlap slightly so seams never show).
+- Ayat section: min-height 820px (760px under 640px); text-shadow 0 2px 15px oklch(12% .02 120 / .68) on .ayat-copy.
+- .chapters { position: relative; z-index: 2; background: var(--ink) }
+- .chapter-page { min-height: 100svh; display: grid; place-items: center; padding: 7.5rem 1.25rem; text-align: center; position: relative; overflow: hidden }
+  .chapter-page + .chapter-page { margin-top: -2.5rem }
+  .chapter-page::after { content: ""; position: absolute; inset: 0 0 auto; height: 7rem; pointer-events: none; background: linear-gradient(to bottom, var(--from, transparent), transparent) }
+  The date page sets --from: var(--ivory); the details page --from: transparent.
+- Countdown section (position relative, padding 8.5rem 1rem 7rem, min-height 620px):
+  .countdown-section::before { content: ""; position: absolute; inset: -2.5rem 0 auto; height: 12rem; z-index: 0; pointer-events: none;
+    background: linear-gradient(to bottom, var(--walima-bg), color-mix(in oklab, var(--walima-bg), var(--ink) 55%) 40%, var(--ink)) }
+  .countdown-section > * { position: relative; z-index: 1 }
+  This is the cream-to-black melt between the Walima page and the countdown.
+- Countdown heading: Cormorant italic 600, color var(--champagne-gold), font-size clamp(3rem, 8vw, 5.2rem), line-height .95.
+- Wishes section frame: .wishes-section::before { position: absolute; inset: 2.5rem 1.25rem; border: 1px solid color-mix(in oklab, var(--gold), transparent 55%) }.
+
+══════ 7. SCRATCH HEART (exact) ══════
+.heart-scratch {
+  position: relative; width: min(72vw, 280px); aspect-ratio: 1 / .92; touch-action: none;
+  filter: drop-shadow(0 18px 30px oklch(50% .06 60 / .25));
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 92'%3E%3Cpath d='M50 90C20 68 2 50 2 28 2 13 13 2 27 2c10 0 18 6 23 14C55 8 63 2 73 2c14 0 25 11 25 26 0 22-18 40-48 62z'/%3E%3C/svg%3E") center / contain no-repeat;
+  (add the same -webkit-mask)
+}
+.heart-scratch__inner { position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 12%; background: radial-gradient(circle at 50% 40%, white, var(--ivory)) }
+.heart-scratch__inner strong { font-family: var(--font-display); font-weight: 500; line-height: 1; color: var(--primary); font-size: clamp(5rem, 22vw, 8rem); opacity: .15; transform: scale(.94); transition: opacity .9s, transform 1.2s cubic-bezier(.2,.7,.2,1) }
+.heart-scratch.is-revealed .heart-scratch__inner strong { opacity: 1; transform: scale(1) }
+.heart-scratch__canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; transition: opacity .9s }
+.heart-scratch.is-revealed .heart-scratch__canvas { opacity: 0; pointer-events: none }
+Canvas logic (exact): size to getBoundingClientRect × devicePixelRatio and ctx.scale(dpr, dpr); fill with getComputedStyle(canvas).getPropertyValue("--scratch-rose") (fallback #b58f86); draw 900 random 1×1 px rects in rgba(255,255,255, random×.16); fillStyle rgba(255,250,245,.85), textAlign center; "Scratch to reveal" in "italic 500 19px 'Cormorant Garamond', serif" at y = height × .46; "✦   THE DATE   ✦" in "600 8px Manrope, sans-serif" at y + 20.
+Erasing: pointerdown → drawing = true, setPointerCapture, erase; pointermove → erase while drawing; erase = globalCompositeOperation "destination-out", full circle radius 22.
+pointerup / pointercancel → drawing = false; getImageData (willReadFrequently: true); loop i = 3; i < data.length; i += 80, count samples and those with alpha < 20; if cleared > 40% → add is-revealed and call onReveal().
+
+══════ 8. DATE SEQUENCE AFTER REVEAL ══════
+.chapter-date-rest { min-height: 9.5rem; margin-top: 1.8rem }
+.chapter-date-rest > * { opacity: 0; transform: translateY(14px); transition: opacity 1s, transform 1s, letter-spacing 1.4s }
+.chapter-date-rest.is-visible > * { opacity: 1; transform: none }
+Month: Cormorant 500, uppercase, clamp(1.6rem, 6vw, 2.2rem), letter-spacing .1em → when visible letter-spacing .34em with transition-delay .3s (the letters spread apart while fading in).
+Year: Cormorant 600, clamp(2.6rem, 11vw, 3.6rem), letter-spacing .12em, transition-delay .8s; gold gradient text: background linear-gradient(180deg, color-mix(in oklab, var(--champagne), white 35%) 0%, var(--champagne) 45%, var(--champagne-deep) 100%); background-clip text; color transparent; filter drop-shadow(0 1px 0 rgba(255,255,255,.7)) drop-shadow(0 2px 2px oklch(35% .04 70 / .3)).
+"Scroll to continue": Manrope 600, .58rem, uppercase, letter-spacing .28em, color var(--muted-foreground), flex column, gap .6rem, margin-top 1.6rem, transition-delay 1.4s. Its child span: 1px × 28px, background linear-gradient(var(--gold), transparent), animation scroll-hint 1.8s ease-in-out infinite.
+@keyframes scroll-hint { 0%, 100% { opacity: .5; transform: translateY(0) } 50% { opacity: 1; transform: translateY(8px) } }
+
+══════ 9. INTERACTIVE STATES ══════
+- View Location button: background var(--ink), white text, transition colors .15s cubic-bezier(.4,0,.2,1); hover background var(--ink-soft).
+- Wishes inputs: background color-mix(in oklab, var(--ivory), transparent 94%), border 1px color-mix(in oklab, var(--gold), transparent 55%), radius 2px; focus: border-color var(--gold), no outline.
+- Wishes submit: background var(--gold), color var(--ink), letter-spacing .3em, uppercase, .68rem, 600.
+- Contact Us: border 1px var(--gold), color var(--champagne-gold), background color-mix(in oklab, var(--ink), transparent 10%); hover background var(--gold), color var(--ink).
+- Music toggle: fixed bottom 1rem right 1rem, 2.6rem circle, 1px var(--gold) border, gold icon 1.1rem, background color-mix(in oklab, var(--ink) 70%, transparent), backdrop-filter blur(6px), z-index 50. No animation.
+
+══════ 10. REDUCED MOTION ══════
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } *, ::before, ::after { animation-duration: .01ms !important; transition-duration: .01ms !important } }
+
+══════ 11. ACCEPTANCE CHECK (verify and report each) ══════
+[ ] Cover is completely still before tapping.
+[ ] Tap → within 0.9s the cover brightens with a golden glow, zooms 4% and fades out; the invitation arrives from a bright glow (brightness 2.2 → 1 over 1.4s) with a slight scale-down.
+[ ] Hero lines rise 22px and fade in on the exact delay schedule, without blur.
+[ ] Scroll reveals use 0.9s fade + 22px rise with the exact nth-child delays; countdown boxes cascade 0 / .1 / .2 / .3s.
+[ ] Sections overlap by 2.5rem; cream page melts into black above the countdown.
+[ ] Heart is masked to the exact SVG heart, olive (#6f7040) with specks and both text lines; reveals at 40%; "25" goes from 15% opacity to full with scale .94 → 1.
+[ ] Month letter-spacing widens .1em → .34em; year appears at .8s in gold gradient; scroll hint at 1.4s with a bobbing line.
+[ ] Reduced-motion setting disables all motion.

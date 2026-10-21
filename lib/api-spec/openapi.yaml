@@ -24,6 +24,41 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /wishes:
+    get:
+      operationId: listWishes
+      tags: [wishes]
+      summary: List wedding wishes
+      responses:
+        "200":
+          description: The latest wishes for the invitation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WishList"
+    post:
+      operationId: createWish
+      tags: [wishes]
+      summary: Add a wedding wish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WishInput"
+      responses:
+        "201":
+          description: The saved wish
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wish"
+        "400":
+          description: The wish is invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +68,48 @@ components:
           type: string
       required:
         - status
+    Wish:
+      type: object
+      properties:
+        id:
+          type: integer
+        guestName:
+          type: string
+          maxLength: 80
+        message:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - guestName
+        - message
+        - createdAt
+    WishList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Wish"
+    WishInput:
+      type: object
+      properties:
+        guestName:
+          type: string
+          minLength: 1
+          maxLength: 80
+        message:
+          type: string
+          minLength: 1
+          maxLength: 2000
+      required:
+        - guestName
+        - message
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
 
