@@ -369,7 +369,7 @@ img { display: block; }
   transition: opacity .9s;
 }
 .heart-scratch.is-revealed .heart-scratch__canvas { opacity: 0; pointer-events: none; }
-.chapter-date-rest { min-height: 9.5rem; margin-top: 1.8rem; }
+.chapter-date-rest { min-height: 11rem; margin-top: 1.8rem; }
 .chapter-date-rest > * {
   opacity: 0;
   transform: translateY(14px);
@@ -385,6 +385,15 @@ img { display: block; }
   text-transform: uppercase;
 }
 .chapter-date-rest.is-visible .chapter-month { letter-spacing: .34em; transition-delay: .3s; }
+.chapter-weekday {
+  margin: .25rem 0 0;
+  color: var(--muted-foreground);
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.chapter-date-rest.is-visible .chapter-weekday { transition-delay: .55s; }
 .chapter-year {
   margin: .2rem 0 0;
   color: transparent;

@@ -8,8 +8,8 @@ const MUSIC = `${SITE}/__l5e/assets-v1/6879fe34-f22f-43af-86f8-386d8ee7578f/wedd
 const HERO_ART = `${SITE}/assets/lux-cover-D9c3RVX3.jpg`;
 const AYAT_ART = `${SITE}/__l5e/assets-v1/a8ba0e6f-f209-41d5-8d44-e0b3893f1b3b/invitation-green.webp`;
 const WALIMA_ART = `${SITE}/assets/walima-bg-CJLxK3nw.jpg`;
-const LOCATION = 'https://share.google/H6E6SQn2e6cOlGJWC';
-const WEDDING_TIME = new Date('2026-10-25T13:00:00+05:00').getTime();
+const LOCATION = 'https://www.google.com/maps/search/?api=1&query=Usman%20Grand%20Marquee%2C%20Millat%20Town%2C%20Afridi%20Chowk%2C%20Fsd.';
+const WEDDING_TIME = new Date('2026-11-14T13:00:00+05:00').getTime();
 
 type Countdown = { days: number | '--'; hours: number | '--'; minutes: number | '--'; seconds: number | '--' };
 
@@ -105,7 +105,7 @@ function ScratchHeart({ onReveal }: { onReveal: () => void }) {
 
   return (
     <div className={`heart-scratch${revealed ? ' is-revealed' : ''}`} aria-label="Scratch to reveal the Walima date">
-      <div className="heart-scratch__inner"><strong>25</strong></div>
+      <div className="heart-scratch__inner"><strong>14th</strong></div>
       <canvas
         ref={canvasRef}
         className="heart-scratch__canvas"
@@ -138,7 +138,8 @@ function ChapterPages({ onReveal }: { onReveal: () => void }) {
           <ChapterOrnament />
           <ScratchHeart onReveal={revealDate} />
           <div className={`chapter-date-rest${dateRevealed ? ' is-visible' : ''}`} aria-hidden={!dateRevealed}>
-            <p className="chapter-month">October</p>
+            <p className="chapter-month">November</p>
+            <p className="chapter-weekday">Saturday</p>
             <p className="chapter-year">2026</p>
             <p className="chapter-scroll">Scroll to continue<span aria-hidden="true" /></p>
           </div>
@@ -150,12 +151,12 @@ function ChapterPages({ onReveal }: { onReveal: () => void }) {
           <h2 className="chapter-title">Walima</h2>
           <ChapterOrnament />
           <div className="chapter-detail-body">
-            <p className="chapter-label">Walima</p>
-            <p className="chapter-time">1:00 PM</p>
+            <p className="chapter-label">Time</p>
+            <p className="chapter-time">1:00 pm</p>
             <span className="chapter-dot">✦</span>
             <p className="chapter-label">Venue</p>
             <p className="chapter-venue">Usman Grand Marquee</p>
-            <p className="chapter-address">Millat Road, Khayaban-e-Kareem, Faisalabad</p>
+            <p className="chapter-address">Millat Town, Afridi Chowk, Fsd.</p>
           </div>
           <div className="chapter-map-buttons">
             <a className="location-button" data-slot="button" href={LOCATION} target="_blank" rel="noreferrer">
@@ -285,16 +286,16 @@ function InvitationPage() {
               <p className="arabic-kicker hero-reveal hero-reveal--1" lang="ar" dir="rtl">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
               <div className="wedding-introduction hero-reveal hero-reveal--2">
                 <p className="blessing-line">With the Blessings of Allah Almighty</p>
-                <p className="honoured-family">Mrs. Muhammad Hussain Shad</p>
-                <p className="invitation-line">warmly invites you to grace the wedding ceremony of her beloved son</p>
+                <p className="honoured-family">Mr &amp; Mrs Dr. Muhammad Misbah ul Islam</p>
+                <p className="invitation-line">warmly invite you to grace the wedding ceremony of their beloved daughter</p>
               </div>
               <div className="couple-intro">
-                <h1 className="hero-reveal hero-reveal--3">Ubaid-Ur-Rehman</h1>
+                <h1 className="hero-reveal hero-reveal--3">Jannat ul Islam</h1>
                 <span className="ampersand hero-reveal hero-reveal--4">with</span>
-                <h1 className="hero-reveal hero-reveal--5">Zaib-un-Nisa</h1>
+                <h1 className="hero-reveal hero-reveal--5">Muhammad Sanan Hassan</h1>
               </div>
               <div className="wedding-introduction hero-reveal hero-reveal--6">
-                <p className="invitation-line">Daughter of Mr. Muhammad Sadiq</p>
+                <p className="invitation-line">S/O Majid Ali</p>
               </div>
               <div className="wedding-introduction hero-reveal hero-reveal--7">
                 <span className="introduction-dot" aria-hidden="true">✦</span>
