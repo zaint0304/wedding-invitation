@@ -1,0 +1,505 @@
+.pastel-invitation {
+  --ink: #3f4840;
+  --ink-soft: #566057;
+  --ivory: #fffaf2;
+  --gold: #a98255;
+  --champagne-gold: #81633f;
+  --champagne: #92734f;
+  --champagne-deep: #765b3d;
+  --walima-bg: #f6eee7;
+  --primary: #59665b;
+  --muted-foreground: #8a8177;
+  --border: rgb(157 125 91 / 32%);
+  --scratch-rose: #b7838a;
+  --paper: #fbf6ef;
+  --sage: #e9eee7;
+  --rose: #f3e4e1;
+  --plum: #75414b;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+.pastel-invitation .cover-stage {
+  min-height: 100svh;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgb(255 255 255 / 88%), transparent 58%),
+    #e8e9df;
+}
+
+.pastel-invitation .cover-stage::before {
+  position: absolute;
+  inset: clamp(12px, 3vw, 34px);
+  z-index: 2;
+  border: 1px solid rgb(160 127 91 / 54%);
+  outline: 1px solid rgb(160 127 91 / 18%);
+  outline-offset: 5px;
+  content: '';
+  pointer-events: none;
+}
+
+.pastel-invitation .cover-stage > img {
+  width: min(100%, 650px);
+  height: 100svh;
+  object-fit: contain;
+  filter: drop-shadow(0 26px 38px rgb(61 54 43 / 20%));
+}
+
+.pastel-invitation .cover-stage--opening > img {
+  transform: scale(1.025);
+}
+
+.pastel-invitation .hero-section {
+  min-height: min(980px, 100svh);
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 80% 56%, rgb(236 218 213 / 64%), transparent 36%),
+    linear-gradient(135deg, #f6efe6, #f3e8e4 58%, #e8eee7);
+}
+
+.pastel-invitation.invitation-page--open .hero-section {
+  animation: pastel-hero-arrive 1.4s ease-out both;
+}
+
+.pastel-invitation .hero-section .section-art {
+  opacity: .08;
+  filter: sepia(.35) saturate(.62);
+  mix-blend-mode: multiply;
+}
+
+.pastel-invitation .hero-section::after {
+  background: linear-gradient(90deg, rgb(250 246 239 / .93), rgb(250 246 239 / .66) 62%, rgb(250 246 239 / .2));
+}
+
+.pastel-invitation .pastel-bride-art {
+  position: absolute;
+  z-index: -1;
+  right: max(2vw, calc((100vw - 1320px) / 2));
+  bottom: 2.2rem;
+  width: clamp(230px, 34vw, 490px);
+  max-height: 78%;
+  object-fit: contain;
+  object-position: bottom;
+  opacity: .93;
+  filter: drop-shadow(0 22px 28px rgb(107 65 68 / 12%));
+  pointer-events: none;
+}
+
+.pastel-invitation .hero-copy {
+  position: relative;
+  z-index: 1;
+  width: min(88%, 850px);
+  padding: 8.5rem 0 6rem;
+  text-align: left;
+}
+
+.pastel-invitation .arabic-kicker {
+  color: var(--plum);
+  text-align: center;
+}
+
+.pastel-invitation .wedding-introduction {
+  margin-top: 2.4rem;
+  text-align: center;
+}
+
+.pastel-invitation .blessing-line,
+.pastel-invitation .honoured-family,
+.pastel-invitation .invitation-line {
+  color: #656256;
+}
+
+.pastel-invitation .honoured-family {
+  color: #756448;
+}
+
+.pastel-invitation .couple-intro {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.pastel-invitation .hero-copy h1 {
+  color: #66513e;
+  font-size: clamp(3.15rem, 8vw, 6.4rem);
+  line-height: .93;
+  text-wrap: balance;
+}
+
+.pastel-invitation .ampersand {
+  margin: .8rem;
+  color: var(--plum);
+  font-size: 1.65rem;
+  font-style: italic;
+}
+
+.pastel-invitation .introduction-dot {
+  color: var(--plum);
+}
+
+.pastel-invitation .ayat-section {
+  min-height: 760px;
+  color: #47564d;
+  background: #e8eee7;
+}
+
+.pastel-invitation .ayat-section .section-art {
+  opacity: .13;
+  filter: saturate(.65) sepia(.08);
+  mix-blend-mode: multiply;
+}
+
+.pastel-invitation .ayat-section::before {
+  background: linear-gradient(90deg, rgb(237 241 232 / .85), rgb(237 241 232 / .74));
+}
+
+.pastel-invitation .ayat-copy {
+  padding: 7rem 0;
+  text-shadow: none;
+}
+
+.pastel-invitation .ayat-copy > p {
+  color: #556156;
+}
+
+.pastel-invitation .ayat-copy .ayat-arabic {
+  color: #755f48;
+}
+
+.pastel-invitation .ayat-copy > span {
+  color: #8c714e;
+}
+
+.pastel-invitation .chapter-page {
+  color: var(--primary);
+  background: var(--walima-bg);
+}
+
+.pastel-invitation .chapter--c {
+  --primary: #5b6459;
+  --gold: #a17c55;
+  --muted-foreground: #8a7c70;
+  --scratch-rose: #bc9294;
+  background: #f6eee7;
+}
+
+.pastel-invitation .chapter-date {
+  background: linear-gradient(145deg, #f7efeb, #e9eee8);
+}
+
+.pastel-invitation .chapter-details {
+  background: linear-gradient(155deg, #eff1e9, #f6eae6);
+}
+
+.pastel-invitation .chapter-art {
+  opacity: .09;
+  filter: saturate(.6);
+  mix-blend-mode: multiply;
+}
+
+.pastel-invitation .chapter-date .chapter-art,
+.pastel-invitation .chapter-details .chapter-art {
+  opacity: .09;
+}
+
+.pastel-invitation .chapter-number,
+.pastel-invitation .chapter-title {
+  color: #6b5b4b;
+}
+
+.pastel-invitation .heart-scratch {
+  filter: drop-shadow(0 16px 24px rgb(102 72 67 / 16%));
+}
+
+.pastel-invitation .heart-scratch__inner {
+  background: radial-gradient(circle at 50% 40%, #fffdf8, #f2e2dd);
+}
+
+.pastel-invitation .heart-scratch__inner strong {
+  color: #78545a;
+}
+
+.pastel-invitation .chapter-year {
+  color: #947450;
+  background: linear-gradient(180deg, #b49870, #876945);
+  filter: none;
+}
+
+.pastel-invitation .location-button {
+  border-color: #8b7359;
+  border-radius: 999px;
+  color: #68563f;
+}
+
+.pastel-invitation .location-button:hover {
+  color: #fffaf2;
+  background: #6a705f;
+}
+
+.pastel-invitation .countdown-section {
+  min-height: 560px;
+  color: #5f594d;
+  background: linear-gradient(145deg, #f3e6e2, #f7f1e8 52%, #e7ede6);
+}
+
+.pastel-invitation .countdown-section::before {
+  background: linear-gradient(to bottom, #e9eee7, rgb(233 238 231 / 0));
+}
+
+.pastel-invitation .eyebrow {
+  color: #917150;
+}
+
+.pastel-invitation .countdown-section .section-heading h2,
+.pastel-invitation .wishes-copy h2 {
+  color: #655644;
+}
+
+.pastel-invitation .countdown > div {
+  border-color: rgb(143 115 81 / 28%);
+}
+
+.pastel-invitation .countdown strong {
+  color: #745d47;
+}
+
+.pastel-invitation .countdown span {
+  color: #8c8071;
+}
+
+.pastel-invitation .wishes-section {
+  padding: 8rem 1.25rem;
+  color: #555c53;
+  background: #edf0e8;
+}
+
+.pastel-invitation .wishes-section::before {
+  inset: 2rem 1.1rem;
+  border-color: rgb(145 118 84 / 40%);
+}
+
+.pastel-invitation .wishes-pair {
+  color: #66675f;
+}
+
+.pastel-invitation .wishes-label {
+  color: #8c6c4b;
+}
+
+.pastel-invitation .gold-rule {
+  color: #a07b55;
+}
+
+.pastel-invitation .wishes-form input,
+.pastel-invitation .wishes-form textarea {
+  border-color: rgb(137 113 84 / 35%);
+  border-radius: 8px;
+  background: rgb(255 252 247 / 78%);
+  color: #4c514a;
+}
+
+.pastel-invitation .wishes-form input::placeholder,
+.pastel-invitation .wishes-form textarea::placeholder {
+  color: #92887a;
+}
+
+.pastel-invitation .wishes-form input:focus,
+.pastel-invitation .wishes-form textarea:focus {
+  border-color: #9a7956;
+  outline: 2px solid rgb(154 121 86 / 16%);
+}
+
+.pastel-invitation .wishes-form button {
+  border-radius: 999px;
+  background: #727c6d;
+  color: #fffaf2;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.pastel-invitation .wishes-form button:hover {
+  transform: translateY(-2px);
+}
+
+.pastel-invitation .wishes-live li {
+  border-color: rgb(137 113 84 / 25%);
+}
+
+.pastel-invitation .wishes-live span {
+  color: #84684c;
+}
+
+.pastel-invitation .rsvp-section {
+  min-height: 840px;
+  color: #5c5b51;
+  background: linear-gradient(145deg, #f5ebe6, #e9eee7 58%, #f8f2e8);
+}
+
+.pastel-invitation .rsvp-section .section-art {
+  opacity: .06;
+  filter: sepia(.12) saturate(.62);
+  mix-blend-mode: multiply;
+}
+
+.pastel-invitation .rsvp-section::after {
+  background: linear-gradient(180deg, rgb(246 242 234 / .58), rgb(246 242 234 / .86));
+}
+
+.pastel-invitation .rsvp-copy .eyebrow,
+.pastel-invitation .rsvp-list a {
+  color: #8c6b50;
+}
+
+.pastel-invitation .rsvp-copy h2 {
+  color: #665343;
+}
+
+.pastel-invitation .rsvp-list li {
+  border-color: rgb(143 115 81 / 28%);
+}
+
+.pastel-invitation .rsvp-closing-date,
+.pastel-invitation .rsvp-copy > p:not(.eyebrow) {
+  color: #6b6b62;
+}
+
+.pastel-invitation .contact-cta-btn {
+  border-color: #8b7359;
+  border-radius: 999px;
+  background: rgb(255 250 242 / 72%);
+  color: #6a5540;
+}
+
+.pastel-invitation .contact-cta-btn:hover {
+  color: #fffaf2;
+  background: #737d6f;
+}
+
+.pastel-invitation .music-toggle {
+  border-color: rgb(146 115 79 / 60%);
+  background: rgb(250 246 239 / 92%);
+  color: #765d43;
+  box-shadow: 0 8px 22px rgb(56 46 35 / 13%);
+}
+
+.pastel-invitation :is(button, a, input, textarea):focus-visible {
+  outline: 2px solid #9c7650;
+  outline-offset: 3px;
+}
+
+@media (min-width: 1100px) {
+  .pastel-invitation .hero-copy {
+    width: min(84%, 920px);
+    margin-left: max(7%, calc((100vw - 1180px) / 2));
+    text-align: left;
+  }
+
+  .pastel-invitation .arabic-kicker,
+  .pastel-invitation .wedding-introduction,
+  .pastel-invitation .couple-intro {
+    text-align: left;
+  }
+
+  .pastel-invitation .hero-copy .wedding-introduction {
+    max-width: 590px;
+  }
+
+  .pastel-invitation .hero-copy h1 {
+    max-width: 630px;
+  }
+
+  .pastel-invitation .hero-copy .invitation-line {
+    margin-left: 0;
+  }
+
+  .pastel-invitation .introduction-dot {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .pastel-invitation .cover-stage > img {
+    width: 100%;
+    height: 100svh;
+  }
+
+  .pastel-invitation .hero-section {
+    min-height: 860px;
+  }
+
+  .pastel-invitation .hero-copy {
+    width: min(88%, 580px);
+    padding: 6.2rem 0 5rem;
+    text-align: center;
+  }
+
+  .pastel-invitation .pastel-bride-art {
+    right: -12%;
+    bottom: 0;
+    width: min(64vw, 270px);
+    max-height: 44%;
+    opacity: .72;
+    filter: saturate(1.15) contrast(1.05) drop-shadow(0 22px 28px rgb(107 65 68 / 12%));
+  }
+
+  .pastel-invitation .hero-section::after {
+    background: linear-gradient(180deg, rgb(250 246 239 / .82), rgb(250 246 239 / .56) 70%, rgb(250 246 239 / .2));
+  }
+
+  .pastel-invitation .hero-copy h1 {
+    font-size: clamp(2.7rem, 11vw, 4rem);
+  }
+
+  .pastel-invitation .wedding-introduction {
+    margin-top: 2rem;
+  }
+
+  .pastel-invitation .couple-intro {
+    margin-top: 2.4rem;
+  }
+
+  .pastel-invitation .ayat-section {
+    min-height: 700px;
+  }
+
+  .pastel-invitation .countdown {
+    width: min(94vw, 520px);
+  }
+
+  .pastel-invitation .countdown > div {
+    padding: 1.25rem .25rem;
+  }
+
+  .pastel-invitation .countdown span {
+    font-size: .52rem;
+    letter-spacing: .1em;
+  }
+
+  .pastel-invitation .wishes-section {
+    padding: 6rem 1.25rem;
+  }
+
+  .pastel-invitation .wishes-section::before {
+    inset: 1.5rem .7rem;
+  }
+
+  .pastel-invitation .rsvp-list li {
+    align-items: flex-start;
+    font-size: .9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pastel-invitation *,
+  .pastel-invitation *::before,
+  .pastel-invitation *::after {
+    scroll-behavior: auto;
+  }
+}
+
+@keyframes pastel-hero-arrive {
+  0% { opacity: 0; transform: scale(1.01); }
+  100% { opacity: 1; transform: scale(1); }
+}

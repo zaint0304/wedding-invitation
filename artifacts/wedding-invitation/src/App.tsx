@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent, type PointerEvent } from 'react';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { getListWishesQueryKey, useCreateWish, useListWishes, type Wish } from '@workspace/api-client-react';
+import './pastel.css';
 
 const SITE = 'https://ubaidurrehmanw.lovable.app';
-const COVER_IMAGE = `${SITE}/__l5e/assets-v1/f0c0f03a-4a04-4147-9883-a6cc7d88fc90/tap-cover.png`;
+const COVER_IMAGE = '/images/wedding-cover-pastel.webp';
 const MUSIC = `${SITE}/__l5e/assets-v1/6879fe34-f22f-43af-86f8-386d8ee7578f/wedding-music.mp3`;
 const HERO_ART = `${SITE}/assets/lux-cover-D9c3RVX3.jpg`;
 const AYAT_ART = `${SITE}/__l5e/assets-v1/a8ba0e6f-f209-41d5-8d44-e0b3893f1b3b/invitation-green.webp`;
@@ -267,7 +268,7 @@ function InvitationPage() {
   };
 
   return (
-    <main className={`invitation-page invitation-page--${state}`}>
+    <main className={`invitation-page pastel-invitation invitation-page--${state}`}>
       <audio ref={audioRef} src={MUSIC} loop preload="auto" />
       {state === 'open' && (
         <button className="music-toggle" aria-label={musicPlaying ? 'Pause music' : 'Play music'} onClick={toggleMusic}>
@@ -282,6 +283,11 @@ function InvitationPage() {
         <div className="invitation-journey">
           <section id="invitation" className="hero-section paper-section">
             <img src={HERO_ART} alt="Black and gold ornate wedding artwork" className="section-art" />
+            <img
+              src="/images/pastel-bride.webp"
+              alt="Illustration of a bride in a maroon embroidered dress, her face fully concealed by a veil"
+              className="pastel-bride-art"
+            />
             <div className="hero-copy reveal-copy">
               <p className="arabic-kicker hero-reveal hero-reveal--1" lang="ar" dir="rtl">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
               <div className="wedding-introduction hero-reveal hero-reveal--2">
@@ -393,7 +399,7 @@ function InvitationPage() {
         </div>
       ) : (
         <section className={`cover-stage cover-stage--${state}`} aria-label="Wedding invitation cover">
-          <img src={COVER_IMAGE} alt="Black and gold invitation cover with lanterns, flowers and a tap to open seal" />
+          <img src={COVER_IMAGE} alt="Pastel invitation cover with floral borders and a tap to open seal" />
           <button className="cover-trigger cover-trigger--bare" onClick={openInvitation} aria-label="Open the wedding invitation" />
         </section>
       )}
